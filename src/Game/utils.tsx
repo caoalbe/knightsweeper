@@ -6,9 +6,9 @@ import {
   HEX_REVEALED,
   HEX_LIGHT,
   HEX_DARK,
-  HEX_HOVERED_REVEALED,
-  HEX_HOVERED_LIGHT,
-  HEX_HOVERED_DARK,
+  HEX_REVEALED_HOVERED,
+  HEX_LIGHT_HOVERED,
+  HEX_DARK_HOVERED,
 } from "./constants";
 import { Tile, view } from "./types";
 import { Dispatch, SetStateAction } from "react";
@@ -198,9 +198,9 @@ function tileColour(
   switch ((index % 2) + (Math.floor(index / width) % 2)) {
     case 0:
     case 2:
-      return hovered ? HEX_HOVERED_DARK : HEX_DARK;
+      return hovered ? HEX_DARK_HOVERED : HEX_DARK;
     default:
-      return hovered ? HEX_HOVERED_LIGHT : HEX_LIGHT;
+      return hovered ? HEX_LIGHT_HOVERED : HEX_LIGHT;
   }
 }
 
