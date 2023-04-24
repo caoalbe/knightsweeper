@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { UNINTIALIZED, BLANK } from "./constants";
 import { Tile } from "./types";
 import { leftClick, rightClick, numToChar } from "./utils";
@@ -14,17 +14,18 @@ function Game() {
       .map(() => ({ value: UNINTIALIZED, view: BLANK, adj_list: [] }))
   );
 
-  // suppress the right-click menu
-  document.oncontextmenu = (event) => {
-    event.preventDefault();
-  };
-  // suppress text selection (highlighting)
-  document.onmousedown = (event) => {
-    event.preventDefault();
-  };
-
   return (
-    <div className="game-container">
+    <div
+      // suppress the right-click menu
+      onContextMenu={(event) => {
+        event.preventDefault();
+      }}
+      // suppress text selection (highlighting)
+      onMouseDown={(event) => {
+        event.preventDefault();
+      }}
+      className="game-container"
+    >
       {new Array(height).fill(0).map((row, r) => (
         <div className="Game-row">
           {new Array(width).fill(0).map((tile, c) => {
