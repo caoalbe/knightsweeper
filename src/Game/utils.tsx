@@ -1,65 +1,69 @@
 import { UNINTIALIZED, BOMB, FLAG, BLANK } from "./constants";
+import { Tile, view } from "./types";
+import { Dispatch, SetStateAction } from "react";
 
 const width = 18;
 const height = 14;
 const tileCount = width * height;
 
-// todo
-// refactor to typescript
-// create specify type for view and value
-// view: blank, flag, bomb
-// value: uninit, 0->8, bomb
-
-function leftClick(index, tileData, setTileData) {
+function leftClick(
+  index: number,
+  tileData: Array<Tile>,
+  setTileData: Dispatch<SetStateAction<Array<Tile>>>
+) {
   const currView = tileData[index].view;
-  switch (currView) {
-    case UNINTIALIZED: // VIEW is never UNINIT, bc it only references visual.  so it can only be blank
-      // generate board
-      console.log("case uninit");
-      tileData = generateBombs(index);
-    case BLANK:
-      console.log("case blnk");
-      const queue = [index]; // dequeue()-->shift(), enqueue(v)-->push(v)
-      const explored = [index];
-      var curr;
-      var dest;
+  const currValue = tileData[index].value;
 
-      while (queue.length > 0) {
-        curr = queue.shift();
-        if (tileData[curr].value === 0) {
-          for (var i = 0; i < tileData[curr].adj_list.length; i++) {
-            dest = tileData[curr].adj_list[i];
-            if (!explored.includes(dest)) {
-              explored.push(dest);
-              queue.push(dest);
-            }
+  if (currValue == UNINTIALIZED) {
+    // generate board
+    console.log("case uninit");
+    tileData = generateBombs(index);
+  }
+
+  if (currView == BLANK) {
+    console.log("case blnk");
+    // perform bfs
+    // dequeue()-->shift(), enqueue(v)-->push(v)
+    const queue: Array<number> = [index];
+    const explored: Array<number> = [index];
+    var curr: number;
+    var dest: number;
+
+    while (queue.length > 0) {
+      curr = queue.shift() as number;
+      if (tileData[curr].value === 0) {
+        for (var i = 0; i < tileData[curr].adj_list.length; i++) {
+          dest = tileData[curr].adj_list[i];
+          if (!explored.includes(dest)) {
+            explored.push(dest);
+            queue.push(dest);
           }
         }
       }
+    }
 
-      const newTileData = tileData.map((e, i) => {
-        if (explored.includes(i)) {
-          // reveal the tile
-          return { value: e.value, view: e.value, adj_list: e.adj_list };
-        } else {
-          return e;
-        }
-      });
+    const newTileData: Array<Tile> = tileData.map((tile, i) => {
+      if (explored.includes(i)) {
+        // reveal the tile
+        return {
+          value: tile.value,
+          view: tile.value as view,
+          adj_list: tile.adj_list,
+        };
+      } else {
+        return tile;
+      }
+    });
 
-      setTileData(newTileData);
-      break;
-    case FLAG:
-    case BOMB:
-    default: // 0, ..., 8
-      break; // do nothing
+    setTileData(newTileData);
   }
 }
 
-function generateBombs(index) {
+function generateBombs(index: number) {
   // naive rng generation
   // place the bombs
   const probability = 0.15;
-  const newTiles = new Array(tileCount).fill();
+  const newTiles = new Array(tileCount).fill(0);
   const safeTiles = computeAdjacencyList(index);
   safeTiles.push(index);
 
@@ -79,8 +83,8 @@ function generateBombs(index) {
   for (i = 0; i < tileCount; i++) {
     if (newTiles[i].value === UNINTIALIZED) {
       newTiles[i].value = newTiles[i].adj_list
-        .map((index) => newTiles[index].value)
-        .filter((val) => {
+        .map((dest: number) => newTiles[dest].value)
+        .filter((val: number) => {
           if (val === BOMB) {
             return true;
           } else {
@@ -92,7 +96,7 @@ function generateBombs(index) {
   return newTiles;
 }
 
-function computeAdjacencyList(index) {
+function computeAdjacencyList(index: number) {
   if (index < 0 || index >= tileCount) {
     return [];
   }
@@ -121,11 +125,15 @@ function computeAdjacencyList(index) {
     .map(([x, y]) => y * width + x);
 }
 
-function rightClick(index, tileData, setTileData) {
+function rightClick(
+  index: number,
+  tileData: Array<Tile>,
+  setTileData: Dispatch<SetStateAction<Array<Tile>>>
+) {
   // flag or blank
-  const currView = tileData[index].view;
-  var newView;
-  var mutate = true;
+  const currView: view = tileData[index].view;
+  var newView: view;
+  var mutate: boolean = true;
 
   switch (currView) {
     case BLANK:
@@ -151,10 +159,9 @@ function rightClick(index, tileData, setTileData) {
 }
 
 // 0->9 is revealed
-function numToChar(input) {
+function numToChar(input: view) {
   switch (input) {
     case BLANK:
-    case UNINTIALIZED:
       return "";
     case BOMB:
       return "💣";

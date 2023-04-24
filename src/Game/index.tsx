@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UNINTIALIZED, BLANK } from "./constants";
+import { Tile } from "./types";
 import { leftClick, rightClick, numToChar } from "./utils";
 
 const width = 18;
@@ -7,10 +8,9 @@ const height = 14;
 const tileCount = width * height;
 
 function Game() {
-  // game has started
-  const [tileData, setTileData] = useState(
+  const [tileData, setTileData] = useState<Array<Tile>>(
     new Array(tileCount)
-      .fill()
+      .fill(0)
       .map(() => ({ value: UNINTIALIZED, view: BLANK, adj_list: [] }))
   );
 
@@ -24,10 +24,10 @@ function Game() {
   };
 
   return (
-    <div className="">
-      {new Array(height).fill().map((row, r) => (
+    <div className="game-container">
+      {new Array(height).fill(0).map((row, r) => (
         <div className="Game-row">
-          {new Array(width).fill().map((tile, c) => {
+          {new Array(width).fill(0).map((tile, c) => {
             return (
               <div
                 className="Game-tile"
@@ -44,9 +44,6 @@ function Game() {
           })}
         </div>
       ))}
-      {/* <button onClick={() => testTileObject(tileData, setTileData)}>
-        nothing button lol
-      </button> */}
     </div>
   );
 }
