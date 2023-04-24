@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { UNINTIALIZED, BLANK } from "./constants";
 import { Tile } from "./types";
-import { leftClick, rightClick, numToChar } from "./utils";
+import { leftClick, rightClick, numToChar, tileColour } from "./utils";
 
 const width = 18;
 const height = 14;
 const tileCount = width * height;
 
 function Game() {
+  const [hoveredTile, setHoveredTile] = useState<number>(-1);
   const [tileData, setTileData] = useState<Array<Tile>>(
     new Array(tileCount)
       .fill(0)
       .map(() => ({ value: UNINTIALIZED, view: BLANK, adj_list: [] }))
   );
-
+  console.log(`hovered: ${hoveredTile}`);
   return (
     <div
       // suppress the right-click menu
@@ -24,7 +25,7 @@ function Game() {
       onMouseDown={(event) => {
         event.preventDefault();
       }}
-      className="game-container"
+      className=""
     >
       {new Array(height).fill(0).map((row, r) => (
         <div className="Game-row">
@@ -32,6 +33,15 @@ function Game() {
             return (
               <div
                 className="Game-tile"
+                style={{
+                  backgroundColor: tileColour(
+                    r * width + c,
+                    hoveredTile,
+                    tileData,
+                    width
+                  ),
+                }}
+                onMouseOver={() => setHoveredTile(r * width + c)}
                 onContextMenu={() =>
                   rightClick(r * width + c, tileData, setTileData)
                 }

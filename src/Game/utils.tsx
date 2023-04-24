@@ -1,4 +1,15 @@
-import { UNINTIALIZED, BOMB, FLAG, BLANK } from "./constants";
+import {
+  UNINTIALIZED,
+  BOMB,
+  FLAG,
+  BLANK,
+  HEX_REVEALED,
+  HEX_LIGHT,
+  HEX_DARK,
+  HEX_HOVERED_REVEALED,
+  HEX_HOVERED_LIGHT,
+  HEX_HOVERED_DARK,
+} from "./constants";
 import { Tile, view } from "./types";
 import { Dispatch, SetStateAction } from "react";
 
@@ -16,12 +27,10 @@ function leftClick(
 
   if (currValue == UNINTIALIZED) {
     // generate board
-    console.log("case uninit");
     tileData = generateBombs(index);
   }
 
   if (currView == BLANK) {
-    console.log("case blnk");
     // perform bfs
     // dequeue()-->shift(), enqueue(v)-->push(v)
     const queue: Array<number> = [index];
@@ -158,10 +167,10 @@ function rightClick(
   }
 }
 
-// 0->9 is revealed
 function numToChar(input: view) {
   switch (input) {
     case BLANK:
+    case 0:
       return "";
     case BOMB:
       return "💣";
@@ -172,4 +181,27 @@ function numToChar(input: view) {
   }
 }
 
-export { leftClick, generateBombs, rightClick, numToChar };
+function tileColour(
+  index: number,
+  activeTile: number,
+  tileData: Array<Tile>,
+  width: number
+) {
+  const currView = tileData[index].view;
+  const hovered = index === activeTile;
+  if (0 <= currView && currView <= 8) {
+    return HEX_REVEALED;
+  }
+  if (((index % 2) + (Math.floor(index / 2) % 2)) % 2 == 0) {
+  }
+
+  switch ((index % 2) + (Math.floor(index / width) % 2)) {
+    case 0:
+    case 2:
+      return hovered ? HEX_HOVERED_DARK : HEX_DARK;
+    default:
+      return hovered ? HEX_HOVERED_LIGHT : HEX_LIGHT;
+  }
+}
+
+export { leftClick, generateBombs, rightClick, numToChar, tileColour };
