@@ -65,32 +65,15 @@ function generateBombs(index) {
   const probability = 0.1;
   const newBombs = new Array(tileCount).fill(0);
   for (var i = 0; i < tileCount; i++) {
-    if (i != index && Math.random() < probability) {
+    if (i !== index && Math.random() < probability) {
       newBombs[i] = 9;
     }
   }
 
   // enumerate the safe tiles
-  var seenTiles;
-  var toCheck;
-  for (var i = 0; i < tileCount; i++) {
-    if (newBombs[i] != 9) {
-      seenTiles = [];
-
-      toCheck = [
-        i - 2 * width - 1,
-        i - 2 * width + 1,
-        i - width - 2,
-        i - width + 2,
-        i + 2 * width - 1,
-        i + 2 * width + 1,
-        i + width - 2,
-        i + width + 2,
-      ];
-
-      for (var t = 0; t < toCheck.length; t++) {}
-
-      newBombs[i] = 2;
+  for (var j = 0; j < tileCount; j++) {
+    if (newBombs[j] !== 9) {
+      newBombs[j] = 2;
     }
   }
 
@@ -99,10 +82,10 @@ function generateBombs(index) {
 
 function rightClick(visual, setVisual, index) {
   const newVisual = visual.map((entry, i) => {
-    if (i == index) {
-      if (visual[index] == 11) {
+    if (i === index) {
+      if (visual[index] === 11) {
         return 10; // blank --> flag
-      } else if (visual[index] == 10) {
+      } else if (visual[index] === 10) {
         return 11; // flag --> blank
       } else return entry;
     } else return entry;
@@ -130,7 +113,7 @@ function leftClick(
   }
   console.log("left middle");
   const newVisual = visual.map((entry, i) => {
-    if (i == index) {
+    if (i === index) {
       return bombs[index];
     } else return entry;
   });
@@ -142,11 +125,11 @@ function leftClick(
 // 9->11 is unrevealed
 // 0: blank, 1->8: num, 9: flag, 10: bomb
 function numToChar(input) {
-  if (input == 11) {
+  if (input === 11) {
     return "";
-  } else if (input == 9) {
+  } else if (input === 9) {
     return "💣";
-  } else if (input == 10) {
+  } else if (input === 10) {
     return "🚩";
   } else {
     return input;
