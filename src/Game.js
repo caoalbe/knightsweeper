@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import { UNINTIALIZED, BOMB, FLAG, BLANK } from "./constants";
-import {
-  leftClick,
-  generateBombs,
-  computeAdjacencyList,
-  rightClick,
-  numToChar,
-} from "./utils";
+import { UNINTIALIZED, BLANK } from "./constants";
+import { leftClick, rightClick, numToChar } from "./utils";
 
 const width = 18;
 const height = 14;
@@ -14,12 +8,10 @@ const tileCount = width * height;
 
 function Game() {
   // game has started
-  const [firstClick, setFirstClick] = useState(true);
-
   const [tileData, setTileData] = useState(
     new Array(tileCount)
       .fill()
-      .map(() => ({ value: BLANK, view: UNINTIALIZED, adj_list: [] }))
+      .map(() => ({ value: UNINTIALIZED, view: BLANK, adj_list: [] }))
   );
 
   // suppress the right-click menu
@@ -43,14 +35,7 @@ function Game() {
                   rightClick(r * width + c, tileData, setTileData)
                 }
                 onClick={() => {
-                  if (firstClick) {
-                    const newTiles = generateBombs(r * width + c);
-                    setFirstClick(false);
-                    setTileData(newTiles);
-                    leftClick(r * width + c, newTiles, setTileData);
-                  } else {
-                    leftClick(r * width + c, tileData, setTileData);
-                  }
+                  leftClick(r * width + c, tileData, setTileData);
                 }}
               >
                 {numToChar(tileData[r * width + c].view)}
