@@ -10,7 +10,7 @@ import {
   HEX_LIGHT_HOVERED,
   HEX_DARK_HOVERED,
 } from "./constants";
-import { Tile, view } from "./types";
+import { Tile, view, value } from "./types";
 import { Dispatch, SetStateAction } from "react";
 
 const width = 18;
@@ -22,17 +22,16 @@ function leftClick(
   tileData: Array<Tile>,
   setTileData: Dispatch<SetStateAction<Array<Tile>>>
 ): void {
-  const currView = tileData[index].view;
-  const currValue = tileData[index].value;
+  const currView: view = tileData[index].view;
+  const currValue: value = tileData[index].value;
 
-  if (currValue == UNINTIALIZED) {
+  if (currValue === UNINTIALIZED) {
     // generate board
     tileData = generateBombs(index);
   }
 
-  if (currView == BLANK) {
-    // perform bfs
-    // dequeue()-->shift(), enqueue(v)-->push(v)
+  if (currView == BLANK && currValue !== BOMB) {
+    // reveal in bfs fashion
     const queue: Array<number> = [index];
     const explored: Array<number> = [index];
     var curr: number;
@@ -64,6 +63,17 @@ function leftClick(
       }
     });
 
+    setTileData(newTileData);
+  }
+
+  if (currValue === BOMB) {
+    const newTileData: Array<Tile> = tileData.map((tile) => {
+      if (tile.value === BOMB) {
+        return { value: tile.value, view: BOMB, adj_list: tile.adj_list };
+      } else {
+        return tile;
+      }
+    });
     setTileData(newTileData);
   }
 }

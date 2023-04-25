@@ -25,11 +25,10 @@ function Game(): JSX.Element {
       onMouseDown={(event) => {
         event.preventDefault();
       }}
-      className=""
     >
-      {new Array(height).fill(0).map((row, r) => (
+      {new Array(height).fill(0).map((_, r) => (
         <div className="Game-row">
-          {new Array(width).fill(0).map((tile, c) => {
+          {new Array(width).fill(0).map((_, c) => {
             const index = r * width + c;
             return (
               <div
