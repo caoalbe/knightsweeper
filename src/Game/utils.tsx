@@ -21,7 +21,7 @@ function leftClick(
   index: number,
   tileData: Array<Tile>,
   setTileData: Dispatch<SetStateAction<Array<Tile>>>
-) {
+): void {
   const currView = tileData[index].view;
   const currValue = tileData[index].value;
 
@@ -68,14 +68,14 @@ function leftClick(
   }
 }
 
-function generateBombs(index: number) {
+function generateBombs(index: number): Array<Tile> {
   // naive rng generation
   // place the bombs
-  const probability = 0.15;
-  const newTiles = new Array(tileCount).fill(0);
   const safeTiles = computeAdjacencyList(index);
   safeTiles.push(index);
 
+  const newTiles = new Array(tileCount).fill(0);
+  const probability = 0.15;
   var i;
   for (i = 0; i < tileCount; i++) {
     newTiles[i] = {
@@ -105,7 +105,7 @@ function generateBombs(index: number) {
   return newTiles;
 }
 
-function computeAdjacencyList(index: number) {
+function computeAdjacencyList(index: number): Array<number> {
   if (index < 0 || index >= tileCount) {
     return [];
   }
@@ -138,7 +138,7 @@ function rightClick(
   index: number,
   tileData: Array<Tile>,
   setTileData: Dispatch<SetStateAction<Array<Tile>>>
-) {
+): void {
   // flag or blank
   const currView: view = tileData[index].view;
   var newView: view;
@@ -167,7 +167,7 @@ function rightClick(
   }
 }
 
-function numToChar(input: view) {
+function numToChar(input: view): string {
   switch (input) {
     case BLANK:
     case 0:
@@ -177,7 +177,7 @@ function numToChar(input: view) {
     case FLAG:
       return "🚩";
     default:
-      return input;
+      return input.toString();
   }
 }
 
@@ -186,15 +186,18 @@ function tileColour(
   activeTile: number,
   tileData: Array<Tile>,
   width: number
-) {
+): string {
   const currView = tileData[index].view;
   const hovered = index === activeTile;
-  if (0 <= currView && currView <= 8) {
+
+  // Revealed Tiles
+  if (0 === currView) {
     return HEX_REVEALED;
-  }
-  if (((index % 2) + (Math.floor(index / 2) % 2)) % 2 == 0) {
+  } else if (0 < currView && currView <= 8) {
+    return hovered ? HEX_REVEALED_HOVERED : HEX_REVEALED;
   }
 
+  // Unrevealed Tiles
   switch ((index % 2) + (Math.floor(index / width) % 2)) {
     case 0:
     case 2:

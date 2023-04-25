@@ -7,14 +7,14 @@ const width = 18;
 const height = 14;
 const tileCount = width * height;
 
-function Game() {
+function Game(): JSX.Element {
   const [hoveredTile, setHoveredTile] = useState<number>(-1);
   const [tileData, setTileData] = useState<Array<Tile>>(
     new Array(tileCount)
       .fill(0)
       .map(() => ({ value: UNINTIALIZED, view: BLANK, adj_list: [] }))
   );
-  console.log(`hovered: ${hoveredTile}`);
+
   return (
     <div
       // suppress the right-click menu
@@ -30,26 +30,25 @@ function Game() {
       {new Array(height).fill(0).map((row, r) => (
         <div className="Game-row">
           {new Array(width).fill(0).map((tile, c) => {
+            const index = r * width + c;
             return (
               <div
                 className="Game-tile"
                 style={{
                   backgroundColor: tileColour(
-                    r * width + c,
+                    index,
                     hoveredTile,
                     tileData,
                     width
                   ),
                 }}
-                onMouseOver={() => setHoveredTile(r * width + c)}
-                onContextMenu={() =>
-                  rightClick(r * width + c, tileData, setTileData)
-                }
+                onMouseOver={() => setHoveredTile(index)}
+                onContextMenu={() => rightClick(index, tileData, setTileData)}
                 onClick={() => {
-                  leftClick(r * width + c, tileData, setTileData);
+                  leftClick(index, tileData, setTileData);
                 }}
               >
-                {numToChar(tileData[r * width + c].view)}
+                {numToChar(tileData[index].view)}
               </div>
             );
           })}
