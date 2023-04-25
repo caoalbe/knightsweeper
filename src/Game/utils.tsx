@@ -30,7 +30,7 @@ function leftClick(
     tileData = generateBombs(index);
   }
 
-  if (currView == BLANK && currValue !== BOMB) {
+  if (currView === BLANK && currValue !== BOMB) {
     // reveal in bfs fashion
     const queue: Array<number> = [index];
     const explored: Array<number> = [index];
