@@ -1,4 +1,4 @@
-import { UNINTIALIZED, BOMB, FLAG, BLANK } from "./constants";
+import { UNINTIALIZED, BOMB, FLAG, BLANK, MISFLAG } from "./constants";
 
 type value =
   | typeof UNINTIALIZED
@@ -25,7 +25,8 @@ type view =
   | 8
   | typeof BOMB
   | typeof FLAG
-  | typeof BLANK;
+  | typeof BLANK
+  | typeof MISFLAG;
 
 type Tile = {
   value: value;
@@ -33,4 +34,19 @@ type Tile = {
   adj_list: Array<number>;
 };
 
-export type { Tile, value, view };
+type Settings = {
+  width: number;
+  height: number;
+  tileCount: number;
+  bombCount: number;
+  probability: number;
+};
+
+type Score = {
+  flagCorrect: number;
+  flagIncorrect: number;
+  bombsRemaining: number;
+  victory: boolean;
+};
+
+export type { value, view, Tile, Settings, Score };

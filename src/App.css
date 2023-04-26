@@ -20,27 +20,48 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  /* font-size: calc(10px + 2vmin); */
   color: white;
 }
 
-.Game-board {
-  background-color: #cfcfcf;
-  min-height: 75vh;
-  min-width: 90vw;
-}
-
-.Game-row {
+.Board-trim {
+  /* font-size: calc(3vmin); */
+  /* text-align: right; */
   display: flex;
   flex-direction: row;
 }
 
-.Game-tile {
+.Board-playable {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Board-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.Board-tile {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 3vw;
-  min-width: 3vw;
+  min-height: 4vmin;
+  min-width: 4vmin;
   border: 1px solid;
   cursor: pointer;
+  font-size: 2vmin;
+}
+
+.popup {
+  position: fixed;
+  padding: 32px;
+  width: 30%;
+  max-width: 640px;
+  background-color: #000000;
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
 }

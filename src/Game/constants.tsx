@@ -2,6 +2,7 @@ const UNINTIALIZED = -1;
 const BOMB = 9;
 const FLAG = 10;
 const BLANK = 11;
+const MISFLAG = 12;
 
 const HEX_REVEALED = "#90EE90";
 const HEX_LIGHT = "#FFB6C1";
@@ -16,6 +17,7 @@ export {
   BOMB,
   FLAG,
   BLANK,
+  MISFLAG,
   HEX_REVEALED,
   HEX_LIGHT,
   HEX_DARK,
