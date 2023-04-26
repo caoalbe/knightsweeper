@@ -68,7 +68,7 @@ function leftClick(
     });
 
     var revealedEverything = true;
-    for (var i = 0; i < settings.tileCount; i++) {
+    for (i = 0; i < settings.tileCount; i++) {
       if (newTileData[i].value !== BOMB && newTileData[i].view === BLANK) {
         revealedEverything = false;
         break;
@@ -218,8 +218,6 @@ function generateScore(tileData: Array<Tile>): Score {
   var flag_count = 0;
   var misflag_count = 0;
   var bomb_count = 0;
-  var blank_count = 0;
-  var swept_count = 0;
   var currTile;
   for (var i = 0; i < tileData.length; i++) {
     currTile = tileData[i];
@@ -229,11 +227,6 @@ function generateScore(tileData: Array<Tile>): Score {
       misflag_count++;
     } else if (currTile.view === BOMB) {
       bomb_count++;
-    } else if (currTile.view === BLANK) {
-      blank_count++;
-    } else {
-      // currTile.view in [0, ...,8]
-      swept_count++;
     }
   }
   return {
