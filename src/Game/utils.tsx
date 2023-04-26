@@ -99,6 +99,40 @@ function leftClick(
   }
 }
 
+function rightClick(
+  index: number,
+  tileData: Array<Tile>,
+  setTileData: Dispatch<SetStateAction<Array<Tile>>>,
+  flagsRemaining: number,
+  setFlagsRemaining: Dispatch<SetStateAction<number>>
+): void {
+  // flag or blank
+  const currView: view = tileData[index].view;
+  var newView: view;
+
+  switch (currView) {
+    case BLANK:
+      newView = FLAG;
+      setFlagsRemaining(flagsRemaining - 1);
+      break;
+    case FLAG:
+      newView = BLANK;
+      setFlagsRemaining(flagsRemaining + 1);
+      break;
+    default:
+      return;
+  }
+
+  const newTileData = tileData.map((e, i) => {
+    if (index === i) {
+      return { value: e.value, view: newView, adj_list: e.adj_list };
+    } else {
+      return e;
+    }
+  });
+  setTileData(newTileData);
+}
+
 function generateBombs(index: number, settings: Settings): Array<Tile> {
   // naive rng generation
   // place the bombs
@@ -154,72 +188,6 @@ function generateBombs(index: number, settings: Settings): Array<Tile> {
   return newTiles;
 }
 
-function computeAdjacencyList(
-  index: number,
-  settings: Settings
-): Array<number> {
-  if (index < 0 || index >= settings.tileCount) {
-    return [];
-  }
-
-  const col = index % settings.width;
-  const row = Math.floor(index / settings.width);
-
-  const feasible = [
-    [col - 1, row - 2],
-    [col + 1, row - 2],
-    [col - 2, row - 1],
-    [col + 2, row - 1],
-    [col - 2, row + 1],
-    [col + 2, row + 1],
-    [col - 1, row + 2],
-    [col + 1, row + 2],
-  ];
-  return feasible
-    .filter(([x, y]) => {
-      if (0 <= x && x < settings.width && 0 <= y && y < settings.height) {
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .map(([x, y]) => y * settings.width + x);
-}
-
-function rightClick(
-  index: number,
-  tileData: Array<Tile>,
-  setTileData: Dispatch<SetStateAction<Array<Tile>>>,
-  flagsRemaining: number,
-  setFlagsRemaining: Dispatch<SetStateAction<number>>
-): void {
-  // flag or blank
-  const currView: view = tileData[index].view;
-  var newView: view;
-
-  switch (currView) {
-    case BLANK:
-      newView = FLAG;
-      setFlagsRemaining(flagsRemaining - 1);
-      break;
-    case FLAG:
-      newView = BLANK;
-      setFlagsRemaining(flagsRemaining + 1);
-      break;
-    default:
-      return;
-  }
-
-  const newTileData = tileData.map((e, i) => {
-    if (index === i) {
-      return { value: e.value, view: newView, adj_list: e.adj_list };
-    } else {
-      return e;
-    }
-  });
-  setTileData(newTileData);
-}
-
 function restartGame(
   gameSettings: Settings,
   setTileData: Dispatch<SetStateAction<Array<Tile>>>,
@@ -235,22 +203,6 @@ function restartGame(
   setPopupActive(false);
   setGameOver(false);
   setFlagsRemaining(gameSettings.bombCount);
-}
-
-function numToChar(input: view): string {
-  switch (input) {
-    case BLANK:
-    case 0:
-      return "";
-    case BOMB:
-      return "💣";
-    case FLAG:
-      return "🚩";
-    case MISFLAG:
-      return "❌";
-    default:
-      return input.toString();
-  }
 }
 
 function generateScore(tileData: Array<Tile>): Score {
@@ -306,6 +258,38 @@ function generateSettings(
   };
 }
 
+function computeAdjacencyList(
+  index: number,
+  settings: Settings
+): Array<number> {
+  if (index < 0 || index >= settings.tileCount) {
+    return [];
+  }
+
+  const col = index % settings.width;
+  const row = Math.floor(index / settings.width);
+
+  const feasible = [
+    [col - 1, row - 2],
+    [col + 1, row - 2],
+    [col - 2, row - 1],
+    [col + 2, row - 1],
+    [col - 2, row + 1],
+    [col + 2, row + 1],
+    [col - 1, row + 2],
+    [col + 1, row + 2],
+  ];
+  return feasible
+    .filter(([x, y]) => {
+      if (0 <= x && x < settings.width && 0 <= y && y < settings.height) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .map(([x, y]) => y * settings.width + x);
+}
+
 function tileColour(
   index: number,
   activeTile: number,
@@ -329,6 +313,22 @@ function tileColour(
       return hovered ? HEX_DARK_HOVERED : HEX_DARK;
     default:
       return hovered ? HEX_LIGHT_HOVERED : HEX_LIGHT;
+  }
+}
+
+function numToChar(input: view): string {
+  switch (input) {
+    case BLANK:
+    case 0:
+      return "";
+    case BOMB:
+      return "💣";
+    case FLAG:
+      return "🚩";
+    case MISFLAG:
+      return "❌";
+    default:
+      return input.toString();
   }
 }
 

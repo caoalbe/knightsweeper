@@ -43,10 +43,16 @@ function Game(): JSX.Element {
   return (
     <>
       <div className="Board">
-        <div>
+        <div
+          // suppress text selection (highlighting)
+          onMouseDown={(event) => {
+            event.preventDefault();
+          }}
+        >
           <span
             style={{
               fontSize: "25px",
+              cursor: "default",
             }}
           >
             🚩 {flagsRemaining}
@@ -121,6 +127,7 @@ function Game(): JSX.Element {
             <button
               style={{
                 fontSize: "18px",
+                cursor: "pointer",
               }}
               onClick={() => {
                 const newSettings: Settings = generateSettings(10, 10, 10);
@@ -139,6 +146,7 @@ function Game(): JSX.Element {
             <button
               style={{
                 fontSize: "18px",
+                cursor: "pointer",
               }}
               onClick={() => {
                 const newSettings: Settings = generateSettings(18, 14, 40);
@@ -157,6 +165,7 @@ function Game(): JSX.Element {
             <button
               style={{
                 fontSize: "18px",
+                cursor: "pointer",
               }}
               onClick={() => {
                 const newSettings: Settings = generateSettings(24, 20, 99);
@@ -185,6 +194,7 @@ function Game(): JSX.Element {
             <button
               style={{
                 fontSize: "18px",
+                cursor: "pointer",
               }}
               onClick={() =>
                 restartGame(
@@ -202,6 +212,7 @@ function Game(): JSX.Element {
               <button
                 style={{
                   fontSize: "18px",
+                  cursor: "pointer",
                 }}
                 onClick={() => setPopupActive(true)}
               >
@@ -223,13 +234,14 @@ function Game(): JSX.Element {
             {finalScore.victory ? "Victory!" : "Defeat"}
           </span>
         </div>
-        <div>Mines Swepts: {finalScore.flagCorrect}</div>
-        <div>Misflags: {finalScore.flagIncorrect}</div>
+        <div>Mines Flagged: {finalScore.flagCorrect}</div>
         <div>Mines Remaining: {finalScore.bombsRemaining}</div>
+        <div>Misflags: {finalScore.flagIncorrect}</div>
         <br />
         <button
           style={{
             fontSize: "18px",
+            cursor: "pointer",
           }}
           onClick={() =>
             restartGame(

@@ -4,13 +4,13 @@ const FLAG = 10;
 const BLANK = 11;
 const MISFLAG = 12;
 
-const HEX_REVEALED = "#90EE90";
-const HEX_LIGHT = "#FFB6C1";
-const HEX_DARK = "#CBC3E3";
+const HEX_REVEALED = "#FFB6C1";
+const HEX_LIGHT = "#D3D3D3";
+const HEX_DARK = "#D3D3D3";
 
-const HEX_REVEALED_HOVERED = "#A0FEA0";
-const HEX_LIGHT_HOVERED = "#FFC6D1";
-const HEX_DARK_HOVERED = "#DBD3F3";
+const HEX_REVEALED_HOVERED = "#FFC6D1";
+const HEX_LIGHT_HOVERED = "#E3E3E3";
+const HEX_DARK_HOVERED = "#E3E3E3";
 
 export {
   UNINTIALIZED,
