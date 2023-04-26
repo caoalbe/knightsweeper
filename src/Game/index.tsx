@@ -38,7 +38,7 @@ function Game(): JSX.Element {
 
   useEffect(() => {
     setFinalScore(generateScore(tileData));
-  }, [gameOver]);
+  }, [gameOver, tileData]);
 
   return (
     <>
